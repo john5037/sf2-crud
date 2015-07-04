@@ -1,0 +1,150 @@
+{% extends 'DemoArticleBundle:Article:layout.html.twig' %}
+{% block content %}
+
+<body>
+	<h2>Basic CRUD Application For Article</h2>
+	<p>Click2 the buttons on datagrid toolbar to do crud actions.</p>
+	
+	<table id="dg" title="My Articles" class="easyui-datagrid"
+			url="{{ path('demo_articlebundle_articlelist')}}"
+			toolbar="#toolbar" pagination="true"
+			rownumbers="true" fitColumns="true" singleSelect="true">
+		<thead>
+			<tr>
+				<th field="id" width="50">id</th>
+				<th field="title" width="50">Title</th>
+				<th field="description" width="100">Description</th>
+				<th field="created_by" width="50">created By</th>
+				<th field="email" width="50">email</th>
+			</tr>
+		</thead>
+	</table>
+	<div id="toolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newArticle()">New Article</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editArticle()">Edit Article</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteArticle()">Remove Article</a>
+	</div>
+	
+	<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+			closed="true" buttons="#dlg-buttons">
+		<div class="ftitle">Article Information</div>
+		<form id="fm" method="post" novalidate>
+			<div class="fitem">
+				<label>Title:</label>
+				<input name="title" class="easyui-textbox" required="true" id='title'>
+			</div>
+			<div class="fitem">
+				<label>Description :</label>
+				<input name="description" class="easyui-textbox" required="true" id="description">
+			</div>
+			<div class="fitem">
+				<label>Created By</label>
+				<input name="created_by" class="easyui-textbox" id="created_by">
+			</div>
+			<div class="fitem">
+				<label>Email:</label>
+				<input name="email" class="easyui-textbox" validType="email" id="email">
+			</div>
+			<input type="hidden" name="articleId" id="articleId">
+		</form>
+	</div>
+	<div id="dlg-buttons">
+	    <div id='msg'> </div>
+		<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveArticle()" style="width:90px">Save</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+	</div>
+	<script type="text/javascript">
+		var url;
+		function newArticle(){
+			$('#dlg').dialog('open').dialog('setTitle','New Article');
+			$('#fm').form('clear');
+			url = "{{path('demo_articlebundle_add')}}";
+		}
+		function editArticle(){
+			var row = $('#dg').datagrid('getSelected');
+			if (row){
+				$('#dlg').dialog('open').dialog('setTitle','Edit Article');
+				$('#fm').form('load',row);
+				$('input#articleId').val(row.id);
+				url = "{{path('demo_articlebundle_edit') }}";
+			}
+		}
+		function saveArticle(){
+		var title = $("input#title").val();var description=$("input#description").val();
+		var email=$("input#email").val();var created_by=$("input#created_by").val();
+		var articleId=$("input#articleId").val();
+			    $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    title: title,description:description,created_by:created_by,email:email,articleId:articleId
+                },
+                cache: false,
+                success: function(data) {
+				  // Display the message
+				  alert(data);
+				 // $('#msg').html(data);
+				  $('#dlg').dialog('close');		// close the dialog
+				  $('#dg').datagrid('reload');	// reload the user data
+                },
+                error: function() {
+					alert('error');
+                },
+            });
+			
+		}
+		function deleteArticle(){
+			var row = $('#dg').datagrid('getSelected');
+			if (row){
+				$.messager.confirm('Confirm','Are you sure you want to delete this article?',function(r){
+					if (r){
+					var articleId=row.id;
+					url = "{{path('demo_articlebundle_delete') }}";
+						 $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    articleId:articleId
+                },
+                cache: false,
+                success: function(data) {
+				  // Display the message
+				  alert(data);
+				 // $('#msg').html(data);
+				  $('#dlg').dialog('close');		// close the dialog
+				  $('#dg').datagrid('reload');	// reload the Article data
+                },
+                error: function() {
+					alert('error');
+                },
+            });
+					}
+				});
+			}
+		}
+	</script>
+	<style type="text/css">
+		#fm{
+			margin:0;
+			padding:10px 30px;
+		}
+		.ftitle{
+			font-size:14px;
+			font-weight:bold;
+			padding:5px 0;
+			margin-bottom:10px;
+			border-bottom:1px solid #ccc;
+		}
+		.fitem{
+			margin-bottom:5px;
+		}
+		.fitem label{
+			display:inline-block;
+			width:80px;
+		}
+		.fitem input{
+			width:160px;
+		}
+	</style>
+</body>
+{% endblock content %}

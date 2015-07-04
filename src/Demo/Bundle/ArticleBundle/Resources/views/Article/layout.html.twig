@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+{% block head %}
+<head>
+	<meta charset="UTF-8">
+	{% block title %}
+	  <title>Basic CRUD Application - jQuery EasyUI CRUD Demo</title>
+	{% endblock title %}
+	<!-- For css -->
+	{% block header_css %}
+	  <link rel="stylesheet" type="text/css" href="{{asset('bundles/demoarticle/css/easyui.css')}}">
+	  <link rel="stylesheet" type="text/css" href="{{asset('bundles/demoarticle/css/icon.css')}}">
+	  <link rel="stylesheet" type="text/css" href="{{asset('bundles/demoarticle/css/color.css')}}">
+	  <link rel="stylesheet" type="text/css" href="{{asset('bundles/demoarticle/css/demo.css')}}">
+	{% endblock header_css %}
+	{% block header_js %}
+	  <script type="text/javascript" src="{{asset('bundles/demoarticle/js/jquery-1.6.min.js')}}"></script>
+	  <script type="text/javascript" src="{{asset('bundles/demoarticle/js/jquery.easyui.min.js')}}"></script>
+	{% endblock header_js %}
+</head>
+{% endblock head%}
+{% block content %}
+
+{% endblock content %}
+</html>

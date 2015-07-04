@@ -1,0 +1,16 @@
+<?php
+
+namespace Demo\UserBundle\Manager\UserManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+class UserManager 
+{
+	public function __construct(ContainerInterface  $serviceContainer){
+		$this->serviceContainer = $serviceContainer;
+	}
+	public function getList()
+	{
+		echo "calledList";exit;
+    }
+	
+}

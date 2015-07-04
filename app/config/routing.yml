@@ -1,0 +1,5 @@
+demo_article:
+    resource: "@DemoArticleBundle/Controller"
+    type: annotation
+    prefix:   /
+
